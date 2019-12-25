@@ -54,7 +54,6 @@ public class User extends BaseModel {
     private String profilePhoto;
 
     public enum Gender {
-		M, F
-	}
-
+		  M, F
+    }
 }
