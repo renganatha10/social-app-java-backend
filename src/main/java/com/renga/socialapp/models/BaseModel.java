@@ -1,4 +1,4 @@
-package com.renga.socialapp.model;
+package com.renga.socialapp.models;
 
 import java.util.Date;
 import java.util.UUID;
@@ -11,18 +11,26 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseModel  {
+@JsonIgnoreProperties(
+        value = {"createdAt", "updatedAt"},
+        allowGetters = true
+)
+public abstract class BaseModel{
     @Id
     @GeneratedValue
+    @Getter
+    @Setter
     private UUID id;
 
     @Temporal(TemporalType.TIMESTAMP)

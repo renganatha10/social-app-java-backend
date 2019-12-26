@@ -1,4 +1,4 @@
-package com.renga.socialapp.model;
+package com.renga.socialapp.models;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,22 +13,22 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "comment", schema = "public")
+@Table(name = "postlike", schema = "public")
 @EqualsAndHashCode(callSuper=false)
-public class Comment extends BaseModel {
-    private String text; 
-    
+@NoArgsConstructor
+public class PostLike extends BaseModel {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)   
+    @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "post_id", nullable = false)   
+    @JoinColumn(name = "post_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Post post;

@@ -1,4 +1,4 @@
-package com.renga.socialapp.model;
+package com.renga.socialapp.models;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,24 +10,29 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.URL;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "postlike", schema = "public")
+@Table(name = "post", schema = "public")
 @EqualsAndHashCode(callSuper=false)
-public class PostLike extends BaseModel {    
+@NoArgsConstructor
+public class Post extends BaseModel {
+    private String text;
+
+    @URL
+    private String videoUrl;
+
+    @URL
+    private String photoUrl;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)   
+    @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "post_id", nullable = false)   
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore
-    private Post post;
 }
