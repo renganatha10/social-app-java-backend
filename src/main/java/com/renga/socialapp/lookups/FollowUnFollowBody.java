@@ -1,4 +1,4 @@
-package com.renga.socialapp.controllers;
+package com.renga.socialapp.lookups;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

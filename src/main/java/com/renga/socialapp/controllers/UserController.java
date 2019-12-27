@@ -6,16 +6,19 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import com.renga.socialapp.lookups.CreatedResponse;
+import com.renga.socialapp.lookups.FollowUnFollowBody;
 import com.renga.socialapp.models.User;
 import com.renga.socialapp.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -42,8 +45,8 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public List<User> search() {
-        return userService.getMyFollowees(UUID.fromString("00d5d57-4712-46a4-bbf7-3d9baffb0472"));
+    public List<User> search(@RequestParam(defaultValue = "") String searchText, Pageable pageable) {
+        return userService.search(searchText, pageable);
     }
 
     @PostMapping("/")

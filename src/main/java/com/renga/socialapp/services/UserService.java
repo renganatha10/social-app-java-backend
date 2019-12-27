@@ -6,14 +6,18 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import com.renga.socialapp.lookups.SearchCriteria;
 import com.renga.socialapp.models.User;
 import com.renga.socialapp.models.UserFollower;
 import com.renga.socialapp.models.UserFollowing;
 import com.renga.socialapp.repositories.UserFollowerRepository;
 import com.renga.socialapp.repositories.UserFollowingRepository;
 import com.renga.socialapp.repositories.UserRepository;
+import com.renga.socialapp.specifications.UserSpecification;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 
@@ -74,5 +78,15 @@ public class UserService {
 
     public User user(UUID userId) {
         return userRepository.findById(userId).get();
+    }
+
+    public List<User> search(String searchText, Pageable pageable) {
+        UserSpecification firstNameUserSpecification = new UserSpecification(new SearchCriteria("firstName", ":", searchText));
+        UserSpecification lastNameUserSpecification = new UserSpecification(new SearchCriteria("lastName", ":", searchText));
+        UserSpecification nickNameUserSpecification = new UserSpecification(new SearchCriteria("nickName", ":", searchText));
+
+        Specification<User> finalSpecification = Specification.where(firstNameUserSpecification).or(lastNameUserSpecification).or(nickNameUserSpecification);
+        return userRepository.findAll(finalSpecification, pageable).toList();
+
     }
 }
