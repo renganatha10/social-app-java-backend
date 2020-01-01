@@ -13,6 +13,8 @@ import com.renga.socialapp.models.UserFollowing;
 import com.renga.socialapp.repositories.UserFollowerRepository;
 import com.renga.socialapp.repositories.UserFollowingRepository;
 import com.renga.socialapp.repositories.UserRepository;
+import com.renga.socialapp.specifications.FollowerSpecification;
+import com.renga.socialapp.specifications.FollowingSpecification;
 import com.renga.socialapp.specifications.UserSpecification;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +61,7 @@ public class UserService {
 
     public List<User> getMyFollowers(UUID followerId){
         List<User> users = new ArrayList<User>();
-        List<UserFollower> userFollowers = userFollowerRepository.findByFollower(new User(followerId));
+        List<UserFollower> userFollowers = userFollowerRepository.findAll(FollowerSpecification.getFollowers(followerId));
         userFollowers.forEach(follower -> {
             users.add(follower.getFollower());
         });
@@ -69,7 +71,7 @@ public class UserService {
 
     public List<User> getMyFollowees(UUID userId){
         List<User> users = new ArrayList<User>();
-        List<UserFollowing> userFollowees = userFollowingRepository.findByFollowee(new User(userId));
+        List<UserFollowing> userFollowees = userFollowingRepository.findAll(FollowingSpecification.getFollowers(userId));
         userFollowees.forEach(follower -> {
             users.add(follower.getFollowee());
         });

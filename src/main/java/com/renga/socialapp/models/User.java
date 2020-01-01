@@ -1,14 +1,12 @@
 package com.renga.socialapp.models;
 
 import java.util.Date;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -16,7 +14,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.hibernate.validator.constraints.URL;
 
@@ -64,13 +61,6 @@ public class User extends BaseModel {
     @URL
     private String profilePhoto;
 
-    @OneToMany(mappedBy = "follower")
-    @JsonIgnore
-    private Set<UserFollower> followers;
-
-    @OneToMany(mappedBy = "followee")
-    @JsonIgnore
-    private Set<UserFollowing> followings;
 
     public enum Gender {
 		  M, F
