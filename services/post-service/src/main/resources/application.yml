@@ -1,0 +1,38 @@
+server.port: 3001
+spring.application.name: social-app-post-service
+spring.h2.console.enabled: true
+spring.datasource.url: jdbc:postgresql://localhost:5432/fb_app_post
+spring.datasource.username: renganatha
+spring.datasource.password:
+
+spring:
+    jpa:
+        show-sql: true
+        properties:
+            hibernate:
+                ddl-auto: validate
+                dialect: org.hibernate.dialect.PostgreSQLDialect
+                format_sql: true
+                generate_statistics: true
+
+logging:
+  level:
+    org.springframework:
+        jdbc:
+            core:
+                JdbcTemplate: DEBUG
+                StatementCreatorUtils: TRACE
+
+api:
+  common:
+    version: 1.0.0
+    title: Social App Post Service
+    description: Rest API Defenition for Social App Post Service
+    termsOfServiceUrl: MINE TERMS OF SERVICE URL
+    license: MIT
+    licenseUrl: https://github.com/renganatha10
+
+    contact:
+      name: Renganatha A
+      url: https://github.com/renganatha10
+      email: renganatha10@gmail.com

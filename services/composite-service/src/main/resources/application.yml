@@ -1,0 +1,18 @@
+
+server.port: 3002
+spring.application.name: social-app-composite-service
+
+
+api:
+  common:
+    version: 1.0.0
+    title: Social App Composite Service
+    description: Rest API Defenition for Social App Composite Service
+    termsOfServiceUrl: MINE TERMS OF SERVICE URL
+    license: MIT
+    licenseUrl: https://github.com/renganatha10
+
+    contact:
+      name: Renganatha A
+      url: https://github.com/renganatha10
+      email: renganatha10@gmail.com

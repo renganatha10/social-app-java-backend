@@ -1,1 +1,6 @@
 rootProject.name = 'social-app'
+
+
+include ':services:user-service'
+include ':services:post-service'
+include ':services:composite-service'
