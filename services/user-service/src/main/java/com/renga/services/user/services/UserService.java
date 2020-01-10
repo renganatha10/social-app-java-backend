@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import com.renga.services.user.lookups.FollowFollowingCount;
 import com.renga.services.user.lookups.SearchCriteria;
 import com.renga.services.user.models.User;
 import com.renga.services.user.models.UserFollower;
@@ -80,6 +81,13 @@ public class UserService {
 
     public User user(UUID userId) {
         return userRepository.findById(userId).get();
+    }
+
+
+    public FollowFollowingCount getFollowerAndFollowingCount(UUID userId) {
+        List<UserFollowing> userFollowees = userFollowingRepository.findAll(FollowingSpecification.getFollowers(userId));
+        List<UserFollower> userFollowers = userFollowerRepository.findAll(FollowerSpecification.getFollowers(userId));
+        return new FollowFollowingCount(userFollowees.size(), userFollowers.size());
     }
 
     public List<User> search(String searchText, Pageable pageable) {

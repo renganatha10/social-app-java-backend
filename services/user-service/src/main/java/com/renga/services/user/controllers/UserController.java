@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import com.renga.services.user.lookups.CreatedResponse;
+import com.renga.services.user.lookups.FollowFollowingCount;
 import com.renga.services.user.lookups.FollowUnFollowBody;
 import com.renga.services.user.models.User;
 import com.renga.services.user.services.UserService;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("api/v1")
 public class UserController {
 
     @Autowired
@@ -31,22 +32,27 @@ public class UserController {
 
     @GetMapping("/")
     public User getUserById() {
-        return userService.user(UUID.fromString("00d5d57-4712-46a4-bbf7-3d9baffb0472"));
+        return userService.user(UUID.fromString("000d5d57-4712-46a4-bbf7-3d9baffb0472"));
     }
 
     @GetMapping("/followers")
     public List<User> getMyFollowers() {
-        return userService.getMyFollowers(UUID.fromString("00d5d57-4712-46a4-bbf7-3d9baffb0472"));
+        return userService.getMyFollowers(UUID.fromString("000d5d57-4712-46a4-bbf7-3d9baffb0472"));
     }
 
     @GetMapping("/followings")
     public List<User> getMyFollowings() {
-        return userService.getMyFollowees(UUID.fromString("00d5d57-4712-46a4-bbf7-3d9baffb0472"));
+        return userService.getMyFollowees(UUID.fromString("000d5d57-4712-46a4-bbf7-3d9baffb0472"));
     }
 
     @GetMapping("/search")
     public List<User> search(@RequestParam(defaultValue = "") String searchText, Pageable pageable) {
         return userService.search(searchText, pageable);
+    }
+
+    @GetMapping("/followFollowingCount")
+    public FollowFollowingCount getFollowerAndFollowingCount(){
+        return userService.getFollowerAndFollowingCount(UUID.fromString("000d5d57-4712-46a4-bbf7-3d9baffb0472"));
     }
 
     @PostMapping("/")

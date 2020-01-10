@@ -15,8 +15,6 @@ public class UserSpecification implements Specification<User> {
 
 	private  SearchCriteria criteria;
 
-
-    // TODO: Make it loosly coupled
     public UserSpecification(SearchCriteria criteria) {
         this.criteria = criteria;
     }
