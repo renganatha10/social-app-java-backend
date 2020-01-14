@@ -5,10 +5,11 @@ import java.util.UUID;
 
 import javax.validation.Valid;
 
-import com.renga.services.user.lookups.CreatedResponse;
-import com.renga.services.user.lookups.FollowFollowingCount;
+import com.renga.api.models.FollowFollowingCount;
+import com.renga.api.models.User;
+import com.renga.api.models.DefaultResponse;
 import com.renga.services.user.lookups.FollowUnFollowBody;
-import com.renga.services.user.models.User;
+import com.renga.services.user.models.UserEntity;
 import com.renga.services.user.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,20 +57,20 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public User createUser(@Valid @RequestBody User user) {
+    public User createUser(@Valid @RequestBody UserEntity user) {
         return userService.createUser(user);
     }
 
     @PostMapping("/follow")
-    public ResponseEntity<CreatedResponse> follow(@Valid @RequestBody FollowUnFollowBody followBody) {
+    public ResponseEntity<DefaultResponse> follow(@Valid @RequestBody FollowUnFollowBody followBody) {
         userService.follow(UUID.fromString(followBody.getFollowerId()), UUID.fromString(followBody.getUserId()));
-        return new ResponseEntity<CreatedResponse>(new CreatedResponse( "User Followed"), HttpStatus.CREATED);
+        return new ResponseEntity<DefaultResponse>(new DefaultResponse( "User Followed"), HttpStatus.CREATED);
     }
 
     @PostMapping("/unFollow")
-    public ResponseEntity<CreatedResponse> unFollow(@Valid @RequestBody FollowUnFollowBody unfollowBody) {
+    public ResponseEntity<DefaultResponse> unFollow(@Valid @RequestBody FollowUnFollowBody unfollowBody) {
         userService.unfollow(UUID.fromString(unfollowBody.getFollowerId()), UUID.fromString(unfollowBody.getUserId()));
-        return new ResponseEntity<CreatedResponse>(new CreatedResponse("User UnFollowed"),HttpStatus.CREATED);
+        return new ResponseEntity<DefaultResponse>(new DefaultResponse("User UnFollowed"),HttpStatus.CREATED);
     }
 
 }

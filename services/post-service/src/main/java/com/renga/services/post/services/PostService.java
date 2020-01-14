@@ -3,11 +3,12 @@ package com.renga.services.post.services;
 import java.util.List;
 import java.util.UUID;
 
-import com.renga.services.post.lookups.CommentLikeCount;
-import com.renga.services.post.lookups.PostCount;
-import com.renga.services.post.models.Comment;
-import com.renga.services.post.models.Post;
-import com.renga.services.post.models.PostLike;
+import com.renga.api.models.*;
+import com.renga.services.post.mappers.CommentMapper;
+import com.renga.services.post.mappers.PostMapper;
+import com.renga.services.post.models.CommentEntity;
+import com.renga.services.post.models.PostEntity;
+import com.renga.services.post.models.PostLikeEntity;
 import com.renga.services.post.repositories.CommentRepository;
 import com.renga.services.post.repositories.PostLikeRepository;
 import com.renga.services.post.repositories.PostRepository;
@@ -24,28 +25,32 @@ public class PostService {
     PostRepository postRepository;
     @Autowired
     PostLikeRepository postLikeRepository;
+    @Autowired
+    PostMapper postMapper;
+    @Autowired
+    CommentMapper commentMapper;
 
     public List<Post> getAllMyPost() {
-        return postRepository.findAll();
+        return postMapper.entityListToApiList(postRepository.findAll());
     }
 
     public List<Comment> getAllMyComments(UUID postId) {
-        return commentRepository.findByPost(new Post(postId));
+        return  commentMapper.entityListToApiList(commentRepository.findByPost(new PostEntity(postId)));
     }
 
-    public Post createPost(Post post) {
-        return postRepository.save(post);
+    public Post createPost(PostEntity post) {
+        return postMapper.entityToApi(postRepository.save(post));
     }
 
-    public Comment createComment(Comment comment) {
-        return commentRepository.save(comment);
+    public Comment createComment(CommentEntity comment) {
+        return  commentMapper.entityToApi(commentRepository.save(comment));
     }
 
-    public PostLike like(PostLike postLike) {
-        return postLikeRepository.save(postLike);
+    public void like(PostLikeEntity postLike) {
+        postLikeRepository.save(postLike);
     }
 
-    public void unlike(PostLike postLike) {
+    public void unlike(PostLikeEntity postLike) {
         postLikeRepository.delete(postLike);
     }
 
@@ -53,10 +58,9 @@ public class PostService {
         return new PostCount(postRepository.findByUserId(userId).size());
     }
 
-
     public CommentLikeCount getMyPostCommentLikeComment(UUID postId) {
-        int postLikeCount = postLikeRepository.findByPost(new Post(postId)).size();
-        int commentCount = commentRepository.findByPost(new Post(postId)).size();
+        int postLikeCount = postLikeRepository.findByPost(new PostEntity(postId)).size();
+        int commentCount = commentRepository.findByPost(new PostEntity(postId)).size();
         return new CommentLikeCount(postLikeCount, commentCount);
     }
 

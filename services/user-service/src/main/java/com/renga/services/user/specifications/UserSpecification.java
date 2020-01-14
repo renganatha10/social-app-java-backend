@@ -6,11 +6,11 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.renga.services.user.lookups.SearchCriteria;
-import com.renga.services.user.models.User;
+import com.renga.services.user.models.UserEntity;
 
 import org.springframework.data.jpa.domain.Specification;
 
-public class UserSpecification implements Specification<User> {
+public class UserSpecification implements Specification<UserEntity> {
     private static final long serialVersionUID = 1L;
 
 	private  SearchCriteria criteria;
@@ -21,7 +21,7 @@ public class UserSpecification implements Specification<User> {
 
 
     @Override
-    public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+    public Predicate toPredicate(Root<UserEntity> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         if(criteria.getCondition().equalsIgnoreCase(":")){
             if(root.get(criteria.getKey()).getJavaType().equals(String.class)){
                 return  criteriaBuilder.like(criteriaBuilder.lower(root.<String>get(criteria.getKey())),"%"+criteria.getValue().toLowerCase()+"%");
