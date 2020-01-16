@@ -8,7 +8,7 @@ import javax.validation.Valid;
 import com.renga.api.models.FollowFollowingCount;
 import com.renga.api.models.User;
 import com.renga.api.models.DefaultResponse;
-import com.renga.services.user.lookups.FollowUnFollowBody;
+import com.renga.api.models.FollowUnFollowBody;
 import com.renga.services.user.models.UserEntity;
 import com.renga.services.user.services.UserService;
 
@@ -57,20 +57,21 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public User createUser(@Valid @RequestBody UserEntity user) {
-        return userService.createUser(user);
+    public ResponseEntity<DefaultResponse> createUser(@Valid @RequestBody UserEntity user) {
+        userService.createUser(user);
+        return new ResponseEntity<>(new DefaultResponse( "User Created"), HttpStatus.CREATED);
     }
 
     @PostMapping("/follow")
     public ResponseEntity<DefaultResponse> follow(@Valid @RequestBody FollowUnFollowBody followBody) {
         userService.follow(UUID.fromString(followBody.getFollowerId()), UUID.fromString(followBody.getUserId()));
-        return new ResponseEntity<DefaultResponse>(new DefaultResponse( "User Followed"), HttpStatus.CREATED);
+        return new ResponseEntity<>(new DefaultResponse( "User Followed"), HttpStatus.CREATED);
     }
 
     @PostMapping("/unFollow")
     public ResponseEntity<DefaultResponse> unFollow(@Valid @RequestBody FollowUnFollowBody unfollowBody) {
         userService.unfollow(UUID.fromString(unfollowBody.getFollowerId()), UUID.fromString(unfollowBody.getUserId()));
-        return new ResponseEntity<DefaultResponse>(new DefaultResponse("User UnFollowed"),HttpStatus.CREATED);
+        return new ResponseEntity<>(new DefaultResponse("User UnFollowed"),HttpStatus.CREATED);
     }
 
 }

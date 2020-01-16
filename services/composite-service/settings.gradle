@@ -1,1 +1,5 @@
 rootProject.name = 'composite-service'
+
+
+include ':api'
+project(':api').projectDir = new File(rootProject.projectDir, '../api')

@@ -47,25 +47,26 @@ public class PostController {
     }
 
     @PostMapping("/")
-    public Post createPost(@Valid PostEntity post) {
-        return postService.createPost(post);
+    public ResponseEntity<DefaultResponse> createPost(@Valid PostEntity post) {
+        postService.createPost(post);
+        return new ResponseEntity<>(new DefaultResponse("Post Created"), HttpStatus.OK);
     }
 
-
     @PostMapping("/comment")
-    public Comment createComment(@Valid CommentEntity comment) {
-        return postService.createComment(comment);
+    public ResponseEntity<DefaultResponse> createComment(@Valid CommentEntity comment) {
+        postService.createComment(comment);
+        return new ResponseEntity<>(new DefaultResponse("Comment Created"), HttpStatus.OK);
     }
 
     @PostMapping("/like")
     public ResponseEntity<DefaultResponse> likePost(@Valid PostLikeEntity postLike) {
         postService.like(postLike);
-        return new ResponseEntity<DefaultResponse>(new DefaultResponse("Post liked"), HttpStatus.OK);
+        return new ResponseEntity<>(new DefaultResponse("Post liked"), HttpStatus.OK);
     }
 
     @PostMapping("/unlike")
     public ResponseEntity<DefaultResponse> unlikePost(@Valid PostLikeEntity postLike) {
         postService.unlike(postLike);
-        return new ResponseEntity<DefaultResponse>(new DefaultResponse("Post Unliked"), HttpStatus.OK);
+        return new ResponseEntity<>(new DefaultResponse("Post Unliked"), HttpStatus.OK);
     }
 }

@@ -40,8 +40,8 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public User createUser(UserEntity user) {
-        return userMapper.entityToApi(userRepository.save(user));
+    public void createUser(UserEntity user) {
+        userMapper.entityToApi(userRepository.save(user));
     }
 
     @Transactional

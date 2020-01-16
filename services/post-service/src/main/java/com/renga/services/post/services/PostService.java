@@ -38,12 +38,12 @@ public class PostService {
         return  commentMapper.entityListToApiList(commentRepository.findByPost(new PostEntity(postId)));
     }
 
-    public Post createPost(PostEntity post) {
-        return postMapper.entityToApi(postRepository.save(post));
+    public void createPost(PostEntity post) {
+         postMapper.entityToApi(postRepository.save(post));
     }
 
-    public Comment createComment(CommentEntity comment) {
-        return  commentMapper.entityToApi(commentRepository.save(comment));
+    public void createComment(CommentEntity comment) {
+        commentMapper.entityToApi(commentRepository.save(comment));
     }
 
     public void like(PostLikeEntity postLike) {
