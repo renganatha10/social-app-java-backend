@@ -2,6 +2,7 @@ package com.renga.services.composite.services;
 
 import com.renga.api.models.FollowFollowingCount;
 import com.renga.api.models.FollowUnFollowBody;
+import com.renga.api.models.PostCount;
 import com.renga.api.models.User;
 import com.renga.services.composite.lookups.UserDetail;
 import com.renga.services.composite.mappers.UserDetailMapper;
@@ -22,12 +23,17 @@ public class UserService {
     private final String UserServiceUrl;
     private HttpEntity<String> getEntity;
     private HttpHeaders headers;
+    private final String postServiceUrl;
 
     @Autowired
-    public UserService(RestTemplate restTemplate, UserDetailMapper userDetailMapper, @Value("${services.user}") String userServiceUrl) {
+    public UserService(RestTemplate restTemplate,
+                       UserDetailMapper userDetailMapper,
+                       @Value("${services.user}") String userServiceUrl,
+                       @Value("${services.post}") String postServiceUrl) {
         this.restTemplate = restTemplate;
         this.userDetailMapper = userDetailMapper;
         this.UserServiceUrl = userServiceUrl;
+        this.postServiceUrl = postServiceUrl;
 
         this.headers = new HttpHeaders();
         this.headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -37,9 +43,11 @@ public class UserService {
     public UserDetail getUserById(UUID userId) {
         String UserDetailUrl = this.UserServiceUrl;
         String UserFollowerFollowingCountUrl = this.UserServiceUrl + "followFollowingCount";
+        String postCountUrl = this.postServiceUrl + "count";
 
         ResponseEntity<User> userResponse = restTemplate.exchange(UserDetailUrl, HttpMethod.GET, getEntity, User.class);
         ResponseEntity<FollowFollowingCount> countResponse = restTemplate.exchange(UserFollowerFollowingCountUrl, HttpMethod.GET, getEntity, FollowFollowingCount.class);
+        ResponseEntity<PostCount> postCountResponse = restTemplate.exchange(postCountUrl, HttpMethod.GET, getEntity, PostCount.class);
 
         User user = userResponse.getBody();
         FollowFollowingCount followFollowingCount = countResponse.getBody();
@@ -47,6 +55,7 @@ public class UserService {
         UserDetail userDetail = userDetailMapper.toUserDetailFromUser(user);
         userDetail.setFollowerCount((double) followFollowingCount.getFollowingCount());
         userDetail.setFollowerCount((double) followFollowingCount.getFollowerCount());
+        userDetail.setPostCount((double) postCountResponse.getBody().getCount());
         return  userDetail;
     }
 

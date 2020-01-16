@@ -2,8 +2,10 @@ package com.renga.services.composite.services;
 
 
 import com.renga.api.models.Comment;
+import com.renga.api.models.CommentLikeCount;
 import com.renga.api.models.Post;
 import com.renga.api.models.PostLike;
+import com.renga.services.composite.lookups.PostDetail;
 import com.renga.services.composite.mappers.PostDetailMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +14,11 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -40,9 +44,30 @@ public class PostService {
     }
 
 
-    public List<Post> getAllMyPost() {
-        ResponseEntity<Post[]> postResponse = restTemplate.exchange(this.postServiceUrl, HttpMethod.GET, getEntity, Post[].class);
-        return Arrays.asList(postResponse.getBody());
+    private ResponseEntity<CommentLikeCount> getCommentAndLikeCount(String postId) {
+        String commentLikeCountUrl = this.postServiceUrl + "commentLikeCount/" + postId;
+        return restTemplate.exchange(commentLikeCountUrl, HttpMethod.GET, getEntity, CommentLikeCount.class);
+    }
+
+
+    public List<PostDetail> getAllMyPost()  {
+        List<PostDetail> postDetails = new ArrayList<>();
+        ResponseEntity<Post[]> postResponse = restTemplate.exchange(this.postServiceUrl + "posts", HttpMethod.GET, getEntity, Post[].class);
+        List<Post> posts = Arrays.asList(postResponse.getBody());
+        List<ResponseEntity<CommentLikeCount>> commentLikeCountResponses =
+                posts.stream()
+                        .map(post -> getCommentAndLikeCount(post.getId().toString()))
+                        .collect(Collectors.toList());
+        commentLikeCountResponses.stream().forEach(counts -> {
+            CommentLikeCount clCount = counts.getBody();
+            PostDetail postDetail = postDetailMapper.toPostDetailFromPost
+                    (posts.stream()
+                            .filter(post -> post.getId().equals(clCount.getPostId())).findFirst().orElse(new Post()));
+            postDetail.setCommentCount((long) clCount.getCommentCount());
+            postDetail.setLikeCount((long) clCount.getCommentCount());
+            postDetails.add(postDetail);
+        });
+        return postDetails;
     }
 
     public List<Comment> getAllMyComments(final UUID postId) {

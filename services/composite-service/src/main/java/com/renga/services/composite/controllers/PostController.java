@@ -4,6 +4,7 @@ import com.renga.api.models.Comment;
 import com.renga.api.models.DefaultResponse;
 import com.renga.api.models.Post;
 import com.renga.api.models.PostLike;
+import com.renga.services.composite.lookups.PostDetail;
 import com.renga.services.composite.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,13 +22,12 @@ public class PostController {
     PostService postService;
 
     @GetMapping("/posts")
-    public List<Post> getMyPosts() {
+    public List<PostDetail> getMyPosts() {
         return postService.getAllMyPost();
     }
 
     @GetMapping("/comment/:postId")
     public List<Comment> getAllMyComments(@RequestParam UUID postId) {
-
         return postService.getAllMyComments(postId);
     }
 
