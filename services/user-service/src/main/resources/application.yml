@@ -36,3 +36,13 @@ api:
       name: Renganatha A
       url: https://github.com/renganatha10
       email: renganatha10@gmail.com
+
+---
+
+spring.profiles: docker
+
+server.port: 8080
+
+spring.datasource.url: jdbc:postgresql://postgres:5432/fb_app_user
+spring.datasource.username: renganatha
+spring.datasource.password: qwerty

@@ -1,4 +1,3 @@
-
 server.port: 3002
 spring.application.name: social-app-composite-service
 
@@ -19,3 +18,13 @@ api:
       name: Renganatha A
       url: https://github.com/renganatha10
       email: renganatha10@gmail.com
+
+---
+
+spring.profiles: docker
+
+server.port: 8080
+
+services:
+  post: http://post:8080/api/v1/
+  user: http://user:8080/api/v1/

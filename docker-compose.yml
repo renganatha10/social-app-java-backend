@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  composite:
+    build: services/composite-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - 5000:8080
+
+  post:
+    build: services/post-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - postgres
+
+  user:
+    build: services/user-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - postgres
+
+  # $ postgres -uroot -h127.0.0.1 -p
+  postgres:
+    image: postgres
+    volumes:
+      - ./docker-postgres:/docker-entrypoint-initdb.d/
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=renganatha
+      - POSTGRES_PASSWORD=qwerty
+      - POSTGRES_MULTIPLE_DATABASES="fb_app_user","fb_app_post"
