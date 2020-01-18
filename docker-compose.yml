@@ -8,6 +8,11 @@ services:
     ports:
       - 5000:8080
 
+  eureka:
+    build: services/eureka-server
+    ports:
+      - 8761:8761
+
   post:
     build: services/post-service
     environment:
