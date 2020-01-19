@@ -17,3 +17,4 @@ eureka:
     response-cache-update-interval-ms: 5000
 
 management.endpoints.web.exposure.include: "*"
+management.endpoint.health.show-details: "ALWAYS"

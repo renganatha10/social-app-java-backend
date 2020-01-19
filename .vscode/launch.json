@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - CompositeServiceApplication",
+            "request": "launch",
+            "mainClass": "com.renga.services.composite.CompositeServiceApplication",
+            "projectName": "composite-service"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - UserServiceApplication",
             "request": "launch",
             "mainClass": "com.renga.services.user.UserServiceApplication",

@@ -20,6 +20,13 @@ services:
     depends_on:
       - postgres
 
+  gateway:
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    build: services/gateway
+    ports:
+      - 8080:8080
+
   user:
     build: services/user-service
     environment:

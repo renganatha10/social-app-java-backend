@@ -1,6 +1,7 @@
 package com.renga.services.composite.services;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.renga.api.models.Comment;
 import com.renga.api.models.CommentLikeCount;
 import com.renga.api.models.Post;
@@ -8,8 +9,12 @@ import com.renga.api.models.PostLike;
 import com.renga.services.composite.lookups.PostDetail;
 import com.renga.services.composite.mappers.PostDetailMapper;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.Status;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -27,16 +32,21 @@ public class PostService {
     private final String postServiceUrl;
     private final HttpEntity<String> getEntity;
     private final HttpHeaders headers;
+    private final String postServiceHealthUrl;
+
+    private static final Logger LOG = LoggerFactory.getLogger(PostService.class);
+
 
     @Autowired
     public PostService(
             final RestTemplate restTemplate,
             final PostDetailMapper postDetailMapper,
-            @Value("${services.post}")
-            final String postServiceUrl) {
+            @Value("${services.post}") final String postServiceUrl,
+            @Value("${healthurl.post}") final String postServiceHealthUrl) {
         this.restTemplate = restTemplate;
         this.postDetailMapper = postDetailMapper;
         this.postServiceUrl = postServiceUrl;
+        this.postServiceHealthUrl = postServiceHealthUrl;
 
         this.headers = new HttpHeaders();
         this.headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -97,5 +107,10 @@ public class PostService {
         String createCommentUrl = this.postServiceUrl + "unlike";
         HttpEntity<PostLike> entity = new HttpEntity<>(postLike,this.headers);
         restTemplate.exchange(createCommentUrl, HttpMethod.POST, entity, String.class);
+    }
+
+    public boolean isPostServiceAvailable () {
+        ResponseEntity<JsonNode> postServiceHealth =  restTemplate.exchange(this.postServiceHealthUrl, HttpMethod.GET, getEntity, JsonNode.class);
+        return postServiceHealth.getBody().get("status").asText().equalsIgnoreCase(Status.UP.getCode());
     }
 }

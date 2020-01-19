@@ -1,5 +1,5 @@
 server.port: 3000
-spring.application.name: social-app-user-service
+spring.application.name: user
 spring.h2.console.enabled: true
 spring.datasource.url: jdbc:postgresql://localhost:5432/fb_app_user
 spring.datasource.username: renganatha
@@ -46,6 +46,9 @@ eureka:
   instance:
     leaseRenewalIntervalInSeconds: 5
     leaseExpirationDurationInSeconds: 5
+
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
 
 ---
 

@@ -1,5 +1,5 @@
 server.port: 3001
-spring.application.name: social-app-post-service
+spring.application.name: post
 spring.h2.console.enabled: true
 spring.datasource.url: jdbc:postgresql://localhost:5432/fb_app_post
 spring.datasource.username: renganatha
@@ -46,6 +46,9 @@ eureka:
   instance:
     leaseRenewalIntervalInSeconds: 5
     leaseExpirationDurationInSeconds: 5
+
+management.endpoint.health.show-details: "ALWAYS"
+management.endpoints.web.exposure.include: "*"
 
 ---
 spring.profiles: docker

@@ -1,13 +1,18 @@
 package com.renga.services.composite.services;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.renga.api.models.FollowFollowingCount;
 import com.renga.api.models.FollowUnFollowBody;
 import com.renga.api.models.PostCount;
 import com.renga.api.models.User;
 import com.renga.services.composite.lookups.UserDetail;
 import com.renga.services.composite.mappers.UserDetailMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.Status;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -24,16 +29,21 @@ public class UserService {
     private HttpEntity<String> getEntity;
     private HttpHeaders headers;
     private final String postServiceUrl;
+    private  final String userServiceHealthUrl;
+
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     public UserService(RestTemplate restTemplate,
                        UserDetailMapper userDetailMapper,
                        @Value("${services.user}") String userServiceUrl,
-                       @Value("${services.post}") String postServiceUrl) {
+                       @Value("${services.post}") String postServiceUrl,
+                       @Value("${healthurl.user}") final String userServiceHealthUrl) {
         this.restTemplate = restTemplate;
         this.userDetailMapper = userDetailMapper;
         this.UserServiceUrl = userServiceUrl;
         this.postServiceUrl = postServiceUrl;
+        this.userServiceHealthUrl = userServiceHealthUrl;
 
         this.headers = new HttpHeaders();
         this.headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -96,6 +106,12 @@ public class UserService {
         FollowUnFollowBody followUnFollowBody = new FollowUnFollowBody(followerId.toString(), userId.toString());
         HttpEntity<FollowUnFollowBody> entity = new HttpEntity<>(followUnFollowBody, this.headers);
         restTemplate.exchange(unFollowUrl, HttpMethod.POST, entity, String.class);
+    }
+
+    public boolean isUserServiceAvailable () {
+        LOG.debug("i am called");
+        ResponseEntity<JsonNode> postServiceHealth =  restTemplate.exchange(this.userServiceHealthUrl, HttpMethod.GET, getEntity, JsonNode.class);
+        return postServiceHealth.getBody().get("status").asText().equalsIgnoreCase(Status.UP.getCode());
     }
 
 }
