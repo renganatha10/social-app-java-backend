@@ -84,8 +84,8 @@ public class UserService {
         return userMapper.entityListToApiList(users);
     }
 
-    public User user(UUID userId) {
-        return userMapper.entityToApi(userRepository.findById(userId).get());
+    public User user(String email) {
+        return userMapper.entityToApi(userRepository.findByEmail(email).get());
     }
 
 

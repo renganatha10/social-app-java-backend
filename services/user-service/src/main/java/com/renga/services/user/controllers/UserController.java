@@ -32,18 +32,18 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/")
-    public User getUserById() {
-        return userService.user(UUID.fromString("000d5d57-4712-46a4-bbf7-3d9baffb0472"));
+    public User getUser(@RequestParam(defaultValue = "") String email) {
+        return userService.user(email);
     }
 
-    @GetMapping("/followers")
-    public List<User> getMyFollowers() {
-        return userService.getMyFollowers(UUID.fromString("000d5d57-4712-46a4-bbf7-3d9baffb0472"));
+    @GetMapping("/followers/:userId")
+    public List<User> getMyFollowers(@RequestParam String userId) {
+        return userService.getMyFollowers(UUID.fromString(userId));
     }
 
-    @GetMapping("/followings")
-    public List<User> getMyFollowings() {
-        return userService.getMyFollowees(UUID.fromString("000d5d57-4712-46a4-bbf7-3d9baffb0472"));
+    @GetMapping("/followings/")
+    public List<User> getMyFollowings(@RequestParam String userId) {
+        return userService.getMyFollowees(UUID.fromString(userId));
     }
 
     @GetMapping("/search")
@@ -51,9 +51,9 @@ public class UserController {
         return userService.search(searchText, pageable);
     }
 
-    @GetMapping("/followFollowingCount")
-    public FollowFollowingCount getFollowerAndFollowingCount(){
-        return userService.getFollowerAndFollowingCount(UUID.fromString("000d5d57-4712-46a4-bbf7-3d9baffb0472"));
+    @GetMapping("/followFollowingCount/:userId")
+    public FollowFollowingCount getFollowerAndFollowingCount(@RequestParam String userId){
+        return userService.getFollowerAndFollowingCount(UUID.fromString(userId));
     }
 
     @PostMapping("/")

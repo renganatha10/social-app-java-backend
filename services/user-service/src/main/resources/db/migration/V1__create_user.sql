@@ -10,6 +10,7 @@ create table "user" (
     gender character VARYING(2) NOT NULL,
     first_name character varying(255),
     last_name character varying(255),
+    password character varying(255),
     nick_name character varying(255) UNIQUE,
     date_of_birth timestamp with time zone,
     bio character varying(255),

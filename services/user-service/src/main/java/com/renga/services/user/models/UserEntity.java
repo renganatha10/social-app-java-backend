@@ -45,6 +45,8 @@ public class UserEntity extends BaseModel {
 
     private String lastName;
 
+    private String password;
+
     @Column(unique=true)
     @NotNull(message = "Please Select NickName")
     private String nickName;

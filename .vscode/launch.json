@@ -37,6 +37,36 @@
             "request": "launch",
             "mainClass": "com.renga.socialapp.DemoApplication",
             "projectName": "social-app"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-GatewayApplication<gateway>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.renga.gateway.GatewayApplication",
+            "projectName": "gateway",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-EurekaApplication<eureka-server>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.renga.eureka.EurekaApplication",
+            "projectName": "eureka-server",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-PostServiceApplication<post-service>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.renga.services.post.PostServiceApplication",
+            "projectName": "post-service",
+            "args": ""
         }
     ]
 }
