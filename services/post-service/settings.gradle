@@ -2,3 +2,4 @@ rootProject.name = 'post-service'
 
 include ':api'
 project(':api').projectDir = new File(rootProject.projectDir, '../api')
+includeBuild '../../api'

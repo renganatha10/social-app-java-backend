@@ -8,13 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 
-@RestController(value = "api/auth")
+@RestController
+@RequestMapping("api/auth")
 public class AuthController {
     @Autowired
     private JWTUtil jWTUtil;
@@ -22,7 +25,7 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<TokenResponse> generateToken(@RequestBody AuthRequest authRequest) throws Exception {
         try {
             Object pricipal = authenticationManager.authenticate(

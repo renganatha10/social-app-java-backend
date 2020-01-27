@@ -49,7 +49,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.flywaydb:flyway-core'
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
-	implementation('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
+	implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
+	implementation 'com.github.javafaker:javafaker:1.0.1'
 
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'

@@ -39,6 +39,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation "org.mapstruct:mapstruct:${mapstructVersion}"
 	implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
+	implementation 'com.github.javafaker:javafaker:1.0.1'
+
 
 	compileOnly 'org.projectlombok:lombok'
 	compileOnly "org.mapstruct:mapstruct-processor:${mapstructVersion}"

@@ -27,7 +27,7 @@ public class CustomUserDetailService implements UserDetailsService {
     private HttpHeaders headers;
 
     @Autowired
-    public CustomUserDetailService(final RestTemplate restTemplate, @Value("${services.user}") String userServiceUrl,) {
+    public CustomUserDetailService(final RestTemplate restTemplate, @Value("${services.user}") String userServiceUrl) {
         this.restTemplate = restTemplate;
         this.UserServiceUrl = userServiceUrl;
 
@@ -41,6 +41,6 @@ public class CustomUserDetailService implements UserDetailsService {
         String getUserDetailUrl = UserServiceUrl + username;
         ResponseEntity<User> userResponse = restTemplate.exchange(getUserDetailUrl, HttpMethod.GET, getEntity, User.class);
         User user = userResponse.getBody();
-        return new  org.springframework.security.core.userdetails.User(user.getId(), user.getPassword(), new ArrayList<>());
+        return new  org.springframework.security.core.userdetails.User(user.getId().toString(), user.getPassword(), new ArrayList<>());
     }
 }
