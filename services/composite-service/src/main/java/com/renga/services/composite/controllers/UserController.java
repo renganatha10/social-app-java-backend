@@ -8,6 +8,7 @@ import com.renga.services.composite.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,18 +22,18 @@ public class UserController {
      private UserService userService;
 
     @GetMapping("/")
-    public UserDetail getUserById() {
-        return userService.getUserById(UUID.fromString("000d5d57-4712-46a4-bbf7-3d9baffb0472"));
+    public UserDetail getUserById(Authentication authentication) {
+        return userService.getUserById(UUID.fromString(authentication.getPrincipal().toString()));
     }
 
     @GetMapping("/followers")
-    public List<User> getMyFollowers() {
-        return userService.getMyFollowers(UUID.fromString("000d5d57-4712-46a4-bbf7-3d9baffb0472"));
+    public List<User> getMyFollowers(Authentication authentication) {
+        return userService.getMyFollowers(UUID.fromString(authentication.getPrincipal().toString()));
     }
 
     @GetMapping("/followings")
-    public List<User> getMyFollowings() {
-        return userService.getMyFollowings(UUID.fromString("000d5d57-4712-46a4-bbf7-3d9baffb0472"));
+    public List<User> getMyFollowings(Authentication authentication) {
+        return userService.getMyFollowings(UUID.fromString(authentication.getPrincipal().toString()));
     }
 
     @GetMapping("/search")

@@ -22,14 +22,14 @@ public class PostController {
     @Autowired
     PostService postService;
 
-    @GetMapping("/posts")
-    public List<Post> getMyPosts() {
-        return postService.getAllMyPost();
+    @GetMapping("/posts/{userId")
+    public List<Post> getMyPosts(@PathVariable String userId) {
+        return postService.getAllMyPost(UUID.fromString(userId));
     }
 
-    @GetMapping("/count")
-    public PostCount getMyPostCounts() {
-        return postService.getMyPostCount(UUID.fromString("000d5d57-4712-46a4-bbf7-3d9baffb0472"));
+    @GetMapping("/count/{userId}")
+    public PostCount getMyPostCounts(@PathVariable String userId) {
+        return postService.getMyPostCount(UUID.fromString(userId));
     }
 
     @GetMapping("/commentLikeCount/{postId}")
@@ -37,7 +37,7 @@ public class PostController {
         return postService.getMyPostCommentLikeComment(UUID.fromString(postId));
     }
 
-    @RequestMapping(path = "/comment/{postId}",  method= RequestMethod.GET)
+    @GetMapping(path = "/comment/{postId}")
     public List<Comment> getAllMyComments(@PathVariable String postId) {
         return postService.getAllMyComments(UUID.fromString(postId));
     }

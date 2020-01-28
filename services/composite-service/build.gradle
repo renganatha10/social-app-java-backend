@@ -20,7 +20,7 @@ configurations {
 
 ext {
 	set('mapstructVersion', "1.3.1.Final")
-	set('springCloudVersion', "Hoxton.BUILD-SNAPSHOT")
+	set('springCloudVersion', "Hoxton.SR1")
 }
 
 repositories {

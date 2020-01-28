@@ -50,9 +50,9 @@ public class UserService {
     }
 
     public UserDetail getUserById(UUID userId) {
-        String UserDetailUrl = this.UserServiceUrl;
-        String UserFollowerFollowingCountUrl = this.UserServiceUrl + "followFollowingCount";
-        String postCountUrl = this.postServiceUrl + "count";
+        String UserDetailUrl = this.UserServiceUrl + "?userId=" + userId;
+        String UserFollowerFollowingCountUrl = this.UserServiceUrl + "followFollowingCount/" + userId;
+        String postCountUrl = this.postServiceUrl + "count/" + userId;
 
         ResponseEntity<User> userResponse = restTemplate.exchange(UserDetailUrl, HttpMethod.GET, getEntity, User.class);
         ResponseEntity<FollowFollowingCount> countResponse = restTemplate.exchange(UserFollowerFollowingCountUrl, HttpMethod.GET, getEntity, FollowFollowingCount.class);

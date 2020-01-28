@@ -30,8 +30,8 @@ public class PostService {
     @Autowired
     CommentMapper commentMapper;
 
-    public List<Post> getAllMyPost() {
-        return postMapper.entityListToApiList(postRepository.findByUserId(UUID.fromString("000d5d57-4712-46a4-bbf7-3d9baffb0472")));
+    public List<Post> getAllMyPost(UUID userId) {
+        return postMapper.entityListToApiList(postRepository.findByUserId(userId));
     }
 
     public List<Comment> getAllMyComments(UUID postId) {

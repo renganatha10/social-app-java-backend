@@ -7,7 +7,8 @@ import com.renga.services.composite.lookups.TokenResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,15 +29,14 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> generateToken(@RequestBody AuthRequest authRequest) throws Exception {
         try {
-            Object pricipal = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.getUserName(), authRequest.getPassword())
-            ).getDetails();
+            Authentication authentication = new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword());
+            authenticationManager.authenticate(authentication);
+            String userId =  SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+            String token = this.jWTUtil.generateToken(userId);
+            return new ResponseEntity<>(new TokenResponse(token, userId ), HttpStatus.OK);
         } catch (Exception ex) {
-            throw new Exception("inavalid username/password");
+            throw new Exception("In valid username/password");
         }
-
-        String token = this.jWTUtil.generateToken("userId");
-        return new ResponseEntity<>(new TokenResponse(token, "userId"), HttpStatus.OK);
     }
 
 }

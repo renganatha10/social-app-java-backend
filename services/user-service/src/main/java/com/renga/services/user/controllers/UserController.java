@@ -16,12 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -32,17 +27,17 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/")
-    public User getUser(@RequestParam(defaultValue = "") String email) {
-        return userService.user(email);
+    public User getUser(@RequestParam(required = false) String email, @RequestParam(required = false) String userId) {
+        return userService.user(email, userId);
     }
 
-    @GetMapping("/followers/:userId")
-    public List<User> getMyFollowers(@RequestParam String userId) {
+    @GetMapping("/followers/{userId}")
+    public List<User> getMyFollowers(@PathVariable String userId) {
         return userService.getMyFollowers(UUID.fromString(userId));
     }
 
-    @GetMapping("/followings/")
-    public List<User> getMyFollowings(@RequestParam String userId) {
+    @GetMapping("/followings/{userId}")
+    public List<User> getMyFollowings(@PathVariable String userId) {
         return userService.getMyFollowees(UUID.fromString(userId));
     }
 
@@ -51,8 +46,8 @@ public class UserController {
         return userService.search(searchText, pageable);
     }
 
-    @GetMapping("/followFollowingCount/:userId")
-    public FollowFollowingCount getFollowerAndFollowingCount(@RequestParam String userId){
+    @GetMapping("/followFollowingCount/{userId}")
+    public FollowFollowingCount getFollowerAndFollowingCount(@PathVariable String userId){
         return userService.getFollowerAndFollowingCount(UUID.fromString(userId));
     }
 

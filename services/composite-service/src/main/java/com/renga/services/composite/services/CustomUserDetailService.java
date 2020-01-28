@@ -7,6 +7,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,6 +28,7 @@ public class CustomUserDetailService implements UserDetailsService {
     private HttpEntity<String> getEntity;
     private HttpHeaders headers;
 
+
     @Autowired
     public CustomUserDetailService(final RestTemplate restTemplate, @Value("${services.user}") String userServiceUrl) {
         this.restTemplate = restTemplate;
@@ -38,9 +41,23 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        String getUserDetailUrl = UserServiceUrl + username;
-        ResponseEntity<User> userResponse = restTemplate.exchange(getUserDetailUrl, HttpMethod.GET, getEntity, User.class);
-        User user = userResponse.getBody();
-        return new  org.springframework.security.core.userdetails.User(user.getId().toString(), user.getPassword(), new ArrayList<>());
+        String getUserDetailUrl = UserServiceUrl + "?email=" + username;
+        return getUserDetails(getUserDetailUrl);
+    }
+
+    public UserDetails loadUserByUserId(String userId) throws UsernameNotFoundException {
+        String getUserDetailUrl = UserServiceUrl + "?userId=" + userId;
+        return getUserDetails(getUserDetailUrl);
+    }
+
+    private UserDetails getUserDetails(String getUserDetailUrl) {
+        try {
+            ResponseEntity<User> userResponse = restTemplate.exchange(getUserDetailUrl, HttpMethod.GET, getEntity, User.class);
+            User user = userResponse.getBody();
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user.getId(), user.getPassword()));
+            return new org.springframework.security.core.userdetails.User(user.getId().toString(), user.getPassword(), new ArrayList<>());
+        } catch (Exception e) {
+            return new org.springframework.security.core.userdetails.User("", "", new ArrayList<>());
+        }
     }
 }
